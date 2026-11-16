@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dj.dot.DotApp
+import com.dj.dot.data.Library
 import com.dj.dot.data.Song
 import kotlinx.coroutines.delay
 
@@ -112,10 +113,8 @@ val LocalSharedTransition = staticCompositionLocalOf<SharedTransitionScope?> { n
 val LocalNowPlayingVisibility = staticCompositionLocalOf<AnimatedVisibilityScope?> { null }
 const val NOW_PLAYING_ART = "now-playing-art"
 
-private fun audioPermission() = com.dj.dot.data.Library.audioPermission()
-
 private fun hasAudio(context: Context) =
-    ContextCompat.checkSelfPermission(context, audioPermission()) == PackageManager.PERMISSION_GRANTED
+    ContextCompat.checkSelfPermission(context, Library.audioPermission()) == PackageManager.PERMISSION_GRANTED
 
 @Composable
 fun DotRoot() {
@@ -129,7 +128,7 @@ fun DotRoot() {
     if (!granted) {
         PermissionScreen {
             val perms = buildList {
-                add(audioPermission())
+                add(Library.audioPermission())
                 if (Build.VERSION.SDK_INT >= 33) add(Manifest.permission.POST_NOTIFICATIONS)
             }
             launcher.launch(perms.toTypedArray())
