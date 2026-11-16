@@ -7,6 +7,7 @@ import com.dj.dot.data.Settings
 import com.dj.dot.playback.DotEngine
 import com.dj.dot.playback.GlyphLights
 import com.dj.dot.playback.Headphones
+import com.dj.dot.ui.ArtLoader
 import com.dj.dot.widget.DotTileService
 import com.dj.dot.widget.DotWidget
 import kotlinx.coroutines.MainScope
