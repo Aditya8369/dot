@@ -86,7 +86,7 @@ sealed interface Screen {
 /** A song menu opened from a list; [playlistId]/[index] allow "remove from playlist". */
 data class SongMenu(val song: Song, val playlistId: String? = null, val index: Int = -1)
 
-class AppState {
+class AppState(var onScreenPopped: ((Screen) -> Unit)? = null) {
     val stack = mutableStateListOf<Screen>(Screen.Home)
     var nowPlaying by mutableStateOf(false)
     var party by mutableStateOf(false)
@@ -101,7 +101,10 @@ class AppState {
     }
 
     fun pop() {
-        if (stack.size > 1) stack.removeAt(stack.lastIndex)
+        if (stack.size > 1) {
+            val popped = stack.removeAt(stack.lastIndex)
+            if (stack.none { it.key == popped.key }) onScreenPopped?.invoke(popped)
+        }
     }
 }
 
@@ -162,10 +165,10 @@ private fun PermissionScreen(onAllow: () -> Unit) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun MainUi() {
-    val app = remember { AppState() }
+    val holder = rememberSaveableStateHolder()
+    val app = remember { AppState(onScreenPopped = { holder.removeState(it.key) }) }
     val engine = DotApp.instance.engine
     val state by engine.state.collectAsStateWithLifecycle()
-    val holder = rememberSaveableStateHolder()
 
     CompositionLocalProvider(LocalAppState provides app) {
         Box(
