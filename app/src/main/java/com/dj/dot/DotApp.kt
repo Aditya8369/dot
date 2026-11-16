@@ -35,7 +35,7 @@ class DotApp : Application() {
             store.clearBpm()
             settings.tempoVersion.set(2)
         }
-        library = Library(this, scope, settings)
+        library = Library(this, scope, settings).also { it.start() }
         engine = DotEngine(this, settings, store, library)
         val playing = engine.state.map { it.playing }.distinctUntilChanged().stateIn(scope, SharingStarted.Eagerly, false)
         glyph = GlyphLights(this, engine.spectrum, settings, playing) { engine.progress }
