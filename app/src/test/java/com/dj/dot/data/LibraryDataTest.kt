@@ -27,4 +27,10 @@ class LibraryDataTest {
         assertEquals(listOf("Zara", ""), lib.songs.map { it.title })
     }
 
+    @Test fun `audioPermission returns appropriate storage or media permission`() {
+        val perm = Library.audioPermission()
+        org.junit.Assert.assertTrue(
+            perm == "android.permission.READ_MEDIA_AUDIO" || perm == "android.permission.READ_EXTERNAL_STORAGE"
+        )
+    }
 }

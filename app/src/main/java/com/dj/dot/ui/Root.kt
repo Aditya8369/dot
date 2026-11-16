@@ -113,6 +113,8 @@ val LocalSharedTransition = staticCompositionLocalOf<SharedTransitionScope?> { n
 val LocalNowPlayingVisibility = staticCompositionLocalOf<AnimatedVisibilityScope?> { null }
 const val NOW_PLAYING_ART = "now-playing-art"
 
+private fun audioPermission() = com.dj.dot.data.Library.audioPermission()
+
 private fun hasAudio(context: Context) =
     ContextCompat.checkSelfPermission(context, Library.audioPermission()) == PackageManager.PERMISSION_GRANTED
 
